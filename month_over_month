@@ -1,0 +1,17 @@
+with summary as (
+select month(created_at) month, sum(quantity*price) amt
+from transactions t join products p on t.product_id = p.id
+where year(created_at) = 2019
+group by 1
+)
+
+select s1.month, round((ifnull(s2.amt,0)-s1.amt)/s1.month,2) as month_over_month
+from summary s1 join summary s2 on s1.month = s2.month-1
+
+or window function
+
+select month, round((ifnull(pre_amt,0)-amt)/amt,2) as month_over_month
+from (
+select month, amt, lag(amt, 1) over (order by month) as pre_amt
+from summary
+) t

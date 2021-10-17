@@ -7,5 +7,5 @@ select * from users where left(created_at,7) = '2020-01')
 
 select comment_count, count(user_id) as frequency
 from (
-select user_id, count(created_at) as comment_count from tmp group by 1)
+select user_id, count(created_at) as comment_count from tmp group by 1) t ##table alias is required
 group by 1

@@ -6,10 +6,10 @@ next month not reained if month(end) = month(start) + 1
 output: start, num month, plan id, retained
 
 SELECT
-  to_date(to_char(start_date::date, 'YYYY-MM'), 'YYYY-MM-01') as start_month,
+  to_date(to_char(start_date::date, 'YYYY-MM'), 'YYYY-MM-01') as start_month, ##date_format(start_date, '%Y-%m-01'
   1 as num_month,
   plan_id,
-  1-sum(if(month(start_date) = month(end_date), 1, 0))/count(user_id)
+  1-sum(if(month(start_date) = month(end_date), 1, 0))/count(user_id)  ### avg(if(datediff(end_date,start_date)<30, 0, 1)
 FROM subscriptions
 GROUP BY 1,2,3
 union all
@@ -18,7 +18,7 @@ SELECT
   2 as num_month,
   plan_id,
   1-sum(case when month(start_date) = month(end_date) then 1
-             when month(start_date)+1 = month(end_date) then 1 else 0 end)/count(user_id)
+             when month(start_date)+1 = month(end_date) then 1 else 0 end)/count(user_id) ### avg(if(datediff(end_date,start_date)<60, 0, 1)
 FROM subscriptions
 GROUP BY 1,2,3
 union all
@@ -28,7 +28,7 @@ SELECT
   plan_id,
   1-sum(case when month(start_date) = month(end_date) then 1
              when month(start_date)+1 = month(end_date) then 1 
-             when month(start_date)+2 = month(end_date) then 1 else 0 end)/count(user_id)
+             when month(start_date)+2 = month(end_date) then 1 else 0 end)/count(user_id) ### avg(if(datediff(end_date,start_date)<90, 0, 1)
 FROM subscriptions
 GROUP BY 1,2,3
 ORDER BY 1,3,2

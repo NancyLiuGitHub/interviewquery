@@ -10,5 +10,5 @@ count(e.id) as 'number of employees'
 from employees e join departments d on e.department_id = d.id
 where department_id in (select department_id from employees group by 1 having count(id) >= 10)
 group by 2
-order by 1
+order by 1 desc
 limit 3

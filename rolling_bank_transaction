@@ -3,7 +3,7 @@ for deposits, value > 0
 avg() over ()
 
 SELECT dt, 
-avg(deposit) over (order by dt range between 2 preceding) as rolling_three_day
+avg(deposit) over (order by dt range interval 2 day preceding) as rolling_three_day
 from (
 select date(created_at) dt, sum(transaction_value) as deposit
 from bank_transactions

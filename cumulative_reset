@@ -1,11 +1,12 @@
 select date(created_at) as date,
-sum(sum(id)) over (partition by month(created_at) order by date(created_at)) as 'monthly_cumulative'
+sum(count(id)) over (partition by date_format(created_at,'%Y-%m') order by date(created_at)) as 'monthly_cumulative'
 from users
 group by date(created_at)
-#can't run
+#can't run, correction: sum(sum(id)) -> sum(count(id)), month(created_at)-> date_format(created_at,'%Y-%m')
 
-###correction
+###method 2
 select date,
-sum(cnt) over (partition by month(date) order by date) as 'monthly_cumulative'
+sum(cnt) over (partition by month(date) order by date) as 'monthly_cumulative' 
+### can't use month(date) when there are multiple year, should be date_format(date,'%Y-%m')
 from (select date(created_at) as date, count(id) as cnt 
     from users group by date(created_at)) t

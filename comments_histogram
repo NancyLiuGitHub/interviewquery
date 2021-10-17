@@ -12,3 +12,15 @@ left join
 (select user_id, count(created_at) as comment_count from tmp group by 1) t ##table alias is required
 on u.id = t.id ### to include users that don't make any comments
 group by 1
+
+
+##optimize
+select comment_count, count(user_id) as frequency
+from 
+(
+select id, count(created_at) as comment_count
+from users u left join comments c on u.id = c.user_id
+where left(created_at,7) = '2020-01'
+group by 1
+)t
+group by 1

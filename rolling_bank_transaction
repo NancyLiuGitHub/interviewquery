@@ -10,3 +10,13 @@ from bank_transactions
 where transaction_value > 0
 group by date(created_at)
 ) t
+
+###or assume date is consistent window function can use rows
+select dt,
+avg(total) over(order by dt rows 2 preceding) as rolling_three_day
+from
+(select date(created_at) as dt,
+ sum(transaction_value) as total
+ from bank_transactions
+ where transaction_value > 0
+ group by date(created_at)) temp

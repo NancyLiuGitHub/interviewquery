@@ -1,0 +1,11 @@
+count(users), count(trans_id), sum(amt) group by month
+where year = 2020
+output: month, ....
+
+SELECT month(created_at) as month,
+count(user_id) as num_customers,
+count(created_at) as num_orders,
+ifnull(sum(quantity),0) as order_amt
+from transactions
+where year(created_at) =2020
+group by month(created_at)

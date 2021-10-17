@@ -6,6 +6,9 @@ with tmp as (
 select * from users where left(created_at,7) = '2020-01')
 
 select comment_count, count(user_id) as frequency
-from (
-select user_id, count(created_at) as comment_count from tmp group by 1) t ##table alias is required
+from 
+(select id from users) u
+left join
+(select user_id, count(created_at) as comment_count from tmp group by 1) t ##table alias is required
+on u.id = t.id ### to include users that don't make any comments
 group by 1

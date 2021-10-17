@@ -1,0 +1,4 @@
+select date(created_at) as date,
+sum(sum(id)) over (partition by month(created_at) order by date(created_at)) as 'monthly_cumulative'
+from users
+group by date(created_at)

@@ -1,0 +1,9 @@
+SELECT distinct destination_one, destination_two
+FROM ((SELECT source_location as destination_one,
+        destination_location as destination_two
+        from flights) t1
+        union all
+        (SELECT 
+        destination_location as destination_one,
+        source_location as destination_two
+        from flights)t2) t

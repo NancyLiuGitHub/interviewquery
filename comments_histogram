@@ -1,0 +1,11 @@
+1) filter by date
+2) comments count per user
+3) count users per comment count
+
+with tmp as (
+select * from users where left(created_at,7) = '2020-01')
+
+select comment_count, count(user_id) as frequency
+from (
+select user_id, count(created_at) as comment_count from tmp group by 1)
+group by 1

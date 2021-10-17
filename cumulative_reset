@@ -2,3 +2,10 @@ select date(created_at) as date,
 sum(sum(id)) over (partition by month(created_at) order by date(created_at)) as 'monthly_cumulative'
 from users
 group by date(created_at)
+#can't run
+
+###correction
+select date,
+sum(cnt) over (partition by month(date) order by date) as 'monthly_cumulative'
+from (select date(created_at) as date, count(id) as cnt 
+    from users group by date(created_at)) t

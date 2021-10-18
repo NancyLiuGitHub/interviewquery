@@ -5,7 +5,7 @@
 with tmp as (
 select * from users where left(created_at,7) = '2020-01')
 
-select comment_count, count(user_id) as frequency
+select ifnull(comment_count,0) as comment_count, count(user_id) as frequency  ##replace null as 0
 from 
 (select id from users) u
 left join
@@ -15,12 +15,12 @@ group by 1
 
 
 ##optimize
-select comment_count, count(user_id) as frequency
+select comment_count, count(id) as frequency
 from 
 (
-select id, count(created_at) as comment_count
+select u.id as id, count(c.created_at) as comment_count
 from users u left join comments c on u.id = c.user_id
-where left(created_at,7) = '2020-01'
+where left(c.created_at,7) = '2020-01'
 group by 1
 )t
 group by 1

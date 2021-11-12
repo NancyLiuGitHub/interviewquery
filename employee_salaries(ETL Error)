@@ -1,3 +1,12 @@
 select first_name, last_name, max(salary) 
 from employees
 group by 1,2
+
+#correction
+#not always a salary increase
+#get it the updated by id
+
+select t1.first_name, t1.last_name, t1.salary
+from employees t1 
+  join (select first_name, last_name, max(id) mid from employees group by 1,2) t2 
+  on t1.first_name = t2.first_name and t1.last_name = t2.last_name and t1.id = t2.mid

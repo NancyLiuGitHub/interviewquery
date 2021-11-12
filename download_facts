@@ -2,9 +2,9 @@ user_dimension: user_id, account_id
 account_dimension: account_id, paying_customer
 download_facts: date, user_id, downloads
 
-1, 101, 101, yes, 3-1 00:01, 12
-1, 102, 102, no, 3-1 00:01, 12
-1, 103, 103, no, 3-1 00:01, 12
+1, 101, 101, yes, 3-1, 12
+1, 102, 102, no, 3-1, 12
+1, 103, 103, no, 3-1, 12
 
 with cte as (
 select date, u.user_id, paying_customer, max(downloads) mdownload
@@ -12,6 +12,18 @@ from download_facts d join user_dimension u on d.user_id = u.user_id
   join account_dimension a on a.account_id = u.account_id
 group by 1,2,3)
 
-select date, paying_customer, avg(mdownload)
+select day(date), paying_customer, avg(mdownload)
 from cte
+group by 1,2
+
+#correction
+
+
+select date, paying_customer, 
+round(sum(downloads)/count(distinct u.user_id),2) average_downloads
+from user_dimension u
+join account_dimension a
+on u.account_id = a.account_id
+join download_facts d
+on u.user_id = d.user_id
 group by 1,2
